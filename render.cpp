@@ -163,7 +163,7 @@ static void drawEye(float x, float y, int side, Eyes e, float k) {
       break;
     case EY_ANGRY:
       lrect(x - w, y - w + 1, 2 * w, 2 * w, INK);
-      lline(x + side * 2.5f, y - 4, x - side * 2, y - 2, INK);
+      lline(x + side * 2, y - 3, x - side, y - 2, INK);
       break;
     case EY_X:
       lline(x - 1.5f, y - 1.5f, x + 1.5f, y + 1.5f, INK);
@@ -307,19 +307,34 @@ static void drawPet() {
       drawEye(-5 * k + lx, ey, -1, e, k);
       drawEye(5 * k + lx, ey, 1, e, k);
     }
-    // nose
-    float nx = L.lookX * k, ny = cy + 1.5f * k;
-    lline(nx - 1, ny, nx + 1, ny, INK);
-    lpix(nx, ny + 1, INK);
-    drawMouth(nx, cy + 4 * k, L.mouth);
+    drawMouth(L.lookX * k, cy + 3 * k, L.mouth);
     if (L.blush) {
       lline(-8 * k, cy + 4 * k, -7 * k, cy + 3 * k, INK);
       lline(7 * k, cy + 3 * k, 8 * k, cy + 4 * k, INK);
     }
   }
 
-  // props
+  // a poop swirl on its head, unless something else is up there
   uint16_t pr = L.props;
+  if (!(pr & (PR_HAT | PR_CROWN | PR_SOCK | PR_ANTENNA | PR_UMBRELLA))) {
+    static const char *const POOP[] = {
+        ".....##....",
+        "....##.....",
+        "...#####...",
+        "..##...##..",
+        "..#######..",
+        ".##.....##.",
+        ".#########.",
+        "##.......##",
+        ".#########.",
+    };
+    int s = (int)ceilf(k);
+    for (int r = 0; r < 9; r++)
+      for (int c = 0; c < 11; c++)
+        if (POOP[r][c] == '#') lrect((c - 5) * k, top + (r - 8) * k, s, s, WHITE);
+  }
+
+  // props
   if (pr & PR_BLANKET) {
     for (float y = cy; y <= cy + ry + 1; y++)
       for (float x = -rx - 2; x <= rx + 2; x++)
