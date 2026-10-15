@@ -265,12 +265,10 @@ static void drawPet() {
   if (k > 1) cy = 0;        // pressed against the glass: grow from the middle
   float top = cy - ry;
 
-  // feet: solid little paws with a toe split
+  // feet
   if (L.melt < 0.3f) {
-    for (int side = -1; side <= 1; side += 2) {
-      lfillEllipse(side * 5 * k, 10, 2.5f, 1.2f, WHITE);
-      lpix(side * 5 * k, 11, BLACK);
-    }
+    lfillEllipse(-5 * k, 10, 2.5f, 1.2f, WHITE);
+    lfillEllipse(5 * k, 10, 2.5f, 1.2f, WHITE);
   }
   // head + folded ears as one shape: fill it all lit, then hollow it out 1px in,
   // which leaves a single outline around the union
@@ -314,11 +312,6 @@ static void drawPet() {
     lline(nx - 1, ny, nx + 1, ny, INK);
     lpix(nx, ny + 1, INK);
     drawMouth(nx, cy + 4 * k, L.mouth);
-    // whiskers poke out past the cheeks
-    for (int side = -1; side <= 1; side += 2) {
-      lline(side * (rx + 1), cy + 2 * k, side * (rx + 4), cy + 1 * k, INK);
-      lline(side * (rx + 1), cy + 4 * k, side * (rx + 4), cy + 5 * k, INK);
-    }
     if (L.blush) {
       lline(-8 * k, cy + 4 * k, -7 * k, cy + 3 * k, INK);
       lline(7 * k, cy + 3 * k, 8 * k, cy + 4 * k, INK);
